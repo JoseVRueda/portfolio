@@ -81,7 +81,7 @@ export const projects = [
   },
   {
     id: "your-qr-code",
-    name: "your-qr-code",
+    name: "Your QR Code",
     repo: "https://github.com/JoseVRueda/your-qr-code",
     demo: "https://your-qr-code.josevruedar.workers.dev/",
     stack: ["TypeScript"],

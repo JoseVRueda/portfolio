@@ -1,0 +1,77 @@
+<canvas id="backdrop" class="pointer-events-none fixed inset-0 z-0 h-full w-full" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById("backdrop");
+  if (canvas instanceof HTMLCanvasElement) {
+    const context = canvas.getContext("2d");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    type Particle = {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      alpha: number;
+      phase: number;
+    };
+
+    let particles: Particle[] = [];
+    let frame = 0;
+
+    function createParticles() {
+      const count = Math.min(70, Math.round((window.innerWidth * window.innerHeight) / 18000));
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.22,
+        size: 0.7 + Math.random() * 1.5,
+        alpha: 0.1 + Math.random() * 0.16,
+        phase: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    function resize() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(window.innerWidth * ratio);
+      canvas.height = Math.floor(window.innerHeight * ratio);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context?.setTransform(ratio, 0, 0, ratio, 0, 0);
+      createParticles();
+    }
+
+    function draw(time: number) {
+      if (!context) return;
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (const particle of particles) {
+        if (!reduced) {
+          particle.x += particle.vx;
+          particle.y += particle.vy + Math.sin(time / 1400 + particle.phase) * 0.08;
+          if (particle.x < -8) particle.x = window.innerWidth + 8;
+          if (particle.x > window.innerWidth + 8) particle.x = -8;
+          if (particle.y < -8) particle.y = window.innerHeight + 8;
+          if (particle.y > window.innerHeight + 8) particle.y = -8;
+        }
+        context.fillStyle = `rgba(225, 29, 72, ${particle.alpha})`;
+        context.beginPath();
+        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        context.fill();
+      }
+    }
+
+    function loop(time: number) {
+      if (document.hidden) {
+        frame = requestAnimationFrame(loop);
+        return;
+      }
+      draw(time);
+      if (!reduced) frame = requestAnimationFrame(loop);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    frame = requestAnimationFrame(loop);
+  }
+</script>

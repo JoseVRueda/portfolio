@@ -1,0 +1,72 @@
+---
+import Section from "./Section.astro";
+import { certifications, education, spokenLanguages } from "../data/profile";
+import { getDictionary, type Locale } from "../i18n/ui";
+import { formatMonthYear } from "../lib/format";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="education" index="05" title={t.education.heading}>
+  <div class="grid gap-12">
+    <div class="grid gap-2 border-l border-primary pl-6">
+      <h3 class="font-display text-2xl font-semibold tracking-tight">{t.education.degree}</h3>
+      <p>
+        <a class="text-primary-text hover:underline" href={education.url} target="_blank" rel="noopener noreferrer">
+          {education.school}
+        </a>
+      </p>
+      <p class="text-sm text-muted">
+        {education.startYear} – {education.endYear}
+      </p>
+    </div>
+
+    <div>
+      <h3 class="font-display text-xl font-semibold">{t.education.languagesHeading}</h3>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {
+          spokenLanguages.map((language) => {
+            const copy = t.education.languages[language.id];
+            return (
+              <li class="rounded-2xl border border-white/10 bg-surface px-5 py-4">
+                <p class="font-medium">{copy.name}</p>
+                <p class="mt-1 text-sm text-muted">{copy.level}</p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-display text-xl font-semibold">{t.education.certificationsHeading}</h3>
+      <ul class="mt-4 divide-y divide-white/10 border-y border-white/10">
+        {
+          certifications.map((item) => (
+            <li class="grid gap-2 py-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+              <div>
+                <p class="font-medium">{t.education.certifications[item.id]}</p>
+                <p class="mt-1 text-sm text-muted">
+                  {item.issuer} · {t.education.issued} {formatMonthYear(item.issued, locale)}
+                </p>
+              </div>
+              <a
+                class="text-sm font-semibold text-primary-text hover:underline"
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.education.viewCertificate}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Section>

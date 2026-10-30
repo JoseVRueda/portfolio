@@ -1,0 +1,41 @@
+---
+import Section from "./Section.astro";
+import { experience } from "../data/profile";
+import { getDictionary, type Locale } from "../i18n/ui";
+import { formatRange } from "../lib/format";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="experience" index="02" title={t.experience.heading}>
+  <ol class="space-y-12">
+    {
+      experience.map((role) => {
+        const copy = t.experience.roles[role.id];
+        return (
+          <li class="grid gap-3 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10">
+            <p class="text-sm font-medium text-primary-text">{formatRange(role.start, role.end, locale)}</p>
+            <div class="relative pl-6">
+              <span class="absolute top-3 bottom-0 left-0 w-px -translate-x-1/2 bg-primary/70" aria-hidden="true"></span>
+              <span class="absolute top-1.5 left-0 size-2.5 -translate-x-1/2 rounded-full bg-primary ring-4 ring-ink" aria-hidden="true"></span>
+              <h3 class="font-display text-2xl font-semibold tracking-tight">{copy.title}</h3>
+              <p class="mt-1 text-muted">{role.company}</p>
+              <ul class="mt-4 space-y-2.5 text-sm leading-relaxed text-text/90">
+                {copy.highlights.map((item) => (
+                  <li class="relative pl-4 before:absolute before:top-2 before:left-0 before:size-1.5 before:rounded-full before:bg-primary">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+</Section>

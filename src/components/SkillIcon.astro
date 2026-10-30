@@ -1,0 +1,54 @@
+---
+import { skillIcons } from "../data/skill-icons";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const path = skillIcons[name];
+---
+
+<svg viewBox="0 0 24 24" class="size-4 shrink-0 text-primary-text" aria-hidden="true">
+  {
+    path ? (
+      <path fill="currentColor" d={path} />
+    ) : name === "C#" ? (
+      <text x="12" y="16" text-anchor="middle" fill="currentColor" font-size="10" font-weight="700">
+        C#
+      </text>
+    ) : name.startsWith("xUnit") ? (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        d="M7 7l10 10M17 7L7 17"
+      />
+    ) : name === "Yup" ? (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M6 12.5l4 4 8-9"
+      />
+    ) : name === "Entity Framework" ? (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        d="M6 8c0-1.4 2.7-2.6 6-2.6s6 1.2 6 2.6-2.7 2.6-6 2.6S6 9.4 6 8zm0 0v4.2c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6V8m-12 4.2v4.2c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6v-4.2"
+      />
+    ) : (
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        d="M9 6.5c-2.2 1.8-2.2 9.2 0 11M15 6.5c2.2 1.8 2.2 9.2 0 11"
+      />
+    )
+  }
+</svg>

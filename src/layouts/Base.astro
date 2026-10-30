@@ -1,0 +1,88 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Backdrop from "../components/Backdrop.astro";
+import { profile } from "../data/profile";
+import { getDictionary, type Locale } from "../i18n/ui";
+import "../styles/global.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const enPath = getRelativeLocaleUrl("en");
+const esPath = getRelativeLocaleUrl("es");
+const canonicalPath = locale === "es" ? esPath : enPath;
+
+function absolute(path: string): string {
+  if (!Astro.site) return path;
+  return new URL(path, Astro.site).href;
+}
+
+const canonical = absolute(canonicalPath);
+const enUrl = absolute(enPath);
+const esUrl = absolute(esPath);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: t.meta.jobTitle,
+  email: `mailto:${profile.email}`,
+  telephone: "+573145058846",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: profile.location.city,
+    addressRegion: profile.location.region,
+    addressCountry: profile.location.countryCode,
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Universidad del Norte",
+    url: "https://www.uninorte.edu.co/",
+  },
+  knowsLanguage: ["es", "en"],
+  sameAs: [profile.links.linkedin, profile.links.github],
+  ...(Astro.site ? { url: canonical } : {}),
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#09090b" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === "es" ? "es_CO" : "en_US"} />
+    <meta property="og:locale:alternate" content={locale === "es" ? "en_US" : "es_CO"} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={t.meta.title} />
+    <meta name="twitter:description" content={t.meta.description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="bg-ink text-text antialiased">
+    <Backdrop />
+    <div class="relative z-10">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+    >
+      {t.nav.skip}
+    </a>
+    <slot />
+    </div>
+  </body>
+</html>

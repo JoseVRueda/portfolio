@@ -1,0 +1,33 @@
+---
+import Section from "./Section.astro";
+import SkillIcon from "./SkillIcon.astro";
+import { skillGroups } from "../data/profile";
+import { getDictionary, type Locale } from "../i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section id="skills" index="03" title={t.skills.heading}>
+  <div class="divide-y divide-white/10 border-y border-white/10">
+    {
+      skillGroups.map((group) => (
+        <div class="grid gap-3 py-5 md:grid-cols-[220px_minmax(0,1fr)] md:items-start">
+          <h3 class="text-sm font-medium text-muted">{t.skills.groups[group.id]}</h3>
+          <ul class="flex flex-wrap gap-2">
+            {group.items.map((item) => (
+              <li class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-surface px-3 py-1.5 text-sm">
+                <SkillIcon name={item} />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>

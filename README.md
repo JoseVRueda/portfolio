@@ -1,43 +1,24 @@
-# Astro Starter Kit: Minimal
+# Portfolio
+
+Personal site of Jose Vicente Rueda Rueda, a fullstack developer. A single page in English (`/`) and Spanish (`/es`), built with [Astro](https://astro.build) and Tailwind CSS.
+
+## Development
+
+Requires Node.js 22.23.4 or later.
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The local server runs at `http://localhost:4321`.
 
-## 🚀 Project Structure
+| Command | What it does |
+| :------ | :----------- |
+| `pnpm dev` | Starts the development server |
+| `pnpm build` | Builds the site into `dist/` |
+| `pnpm preview` | Serves the production build locally |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Content
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Profile data (experience, projects, skills, education) lives in `src/data/profile.ts`. Copy for each language is in `src/i18n/ui.ts`.
